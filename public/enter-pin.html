@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SafeBox - Enter PIN</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Arial", sans-serif;
+      }
+
+      body {
+        background: linear-gradient(to bottom, #87ceeb, #e0f7fa);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .container {
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 15px;
+        padding: 40px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        width: 100%;
+      }
+
+      h1 {
+        color: #0066cc;
+        margin-bottom: 10px;
+        font-size: 28px;
+      }
+
+      p {
+        color: #333;
+        margin-bottom: 30px;
+        font-size: 18px;
+        line-height: 1.6;
+      }
+
+      .pin-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 30px;
+        gap: 15px;
+      }
+
+      .pin-input {
+        width: 60px;
+        height: 70px;
+        border: 2px solid #0066cc;
+        border-radius: 10px;
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+        caret-color: transparent;
+      }
+
+      .pin-input:focus {
+        outline: none;
+        border-color: #4caf50;
+        box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+      }
+
+      .button {
+        background-color: #0066cc;
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 50px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-top: 10px;
+      }
+
+      .button:hover {
+        background-color: #0055aa;
+      }
+
+      .button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
+
+      .instructions {
+        font-size: 14px;
+        color: #666;
+        margin-top: 20px;
+      }
+
+      .beach-icon {
+        font-size: 64px;
+        margin-bottom: 20px;
+        color: #0066cc;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <svg
+        class="icon"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#0066CC"
+        stroke-width="2"
+      >
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+      </svg>
+      <h1>Secure Your Belongings</h1>
+      <p>Enter a 4-digit PIN to secure your locker</p>
+
+      <form id="pinForm">
+        <div class="pin-container">
+          <input
+            type="text"
+            class="pin-input"
+            maxlength="1"
+            pattern="[0-9]*"
+            inputmode="numeric"
+            autocomplete="off"
+            required
+          />
+          <input
+            type="text"
+            class="pin-input"
+            maxlength="1"
+            pattern="[0-9]*"
+            inputmode="numeric"
+            autocomplete="off"
+            required
+          />
+          <input
+            type="text"
+            class="pin-input"
+            maxlength="1"
+            pattern="[0-9]*"
+            inputmode="numeric"
+            autocomplete="off"
+            required
+          />
+          <input
+            type="text"
+            class="pin-input"
+            maxlength="1"
+            pattern="[0-9]*"
+            inputmode="numeric"
+            autocomplete="off"
+            required
+          />
+        </div>
+
+        <button type="submit" class="button" disabled>Secure My Locker</button>
+      </form>
+
+      <p class="instructions">
+        Remember this PIN - you'll need it to retrieve your belongings later.
+      </p>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const inputs = document.querySelectorAll(".pin-input");
+        const form = document.getElementById("pinForm");
+        const submitButton = form.querySelector("button");
+
+        inputs.forEach((input, index) => {
+          input.addEventListener("input", function () {
+            if (this.value.length === 1 && index < inputs.length - 1) {
+              inputs[index + 1].focus();
+            }
+            checkFormValidity();
+          });
+
+          input.addEventListener("keydown", function (e) {
+            if (e.key === "ArrowLeft" && index > 0) {
+              inputs[index - 1].focus();
+            } else if (e.key === "ArrowRight" && index < inputs.length - 1) {
+              inputs[index + 1].focus();
+            } else if (e.key === "Backspace") {
+              if (this.value === "" && index > 0) {
+                inputs[index - 1].focus();
+              }
+            }
+          });
+        });
+
+        function checkFormValidity() {
+          const allFilled = Array.from(inputs).every(
+            (input) => input.value.length === 1
+          );
+          submitButton.disabled = !allFilled;
+        }
+
+        form.addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const pin = Array.from(inputs)
+            .map((input) => input.value)
+            .join("");
+
+          try {
+            const response = await fetch("https://safelocker.onrender/lockers/{id}", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ pin }),
+            });
+
+            const html = await response.text();
+            document.open();
+            document.write(html);
+            document.close();
+          } catch (err) {
+            console.error("Error:", err);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

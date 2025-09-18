@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SafeBox - Success</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Arial", sans-serif;
+      }
+
+      body {
+        background: linear-gradient(to bottom, #87ceeb, #e0f7fa);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .container {
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 15px;
+        padding: 40px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        width: 100%;
+      }
+
+      h1 {
+        color: #0066cc;
+        margin-bottom: 20px;
+        font-size: 28px;
+      }
+
+      p {
+        color: #333;
+        margin-bottom: 30px;
+        font-size: 18px;
+        line-height: 1.6;
+      }
+
+      .icon {
+        font-size: 64px;
+        margin-bottom: 20px;
+        color: #4caf50;
+      }
+
+      .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: #f0f;
+        animation: fall linear forwards;
+        z-index: -1;
+      }
+
+      @keyframes fall {
+        to {
+          transform: translateY(100vh);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <svg
+        class="icon"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+      <h1>Your belongings are safe now, have a great time!</h1>
+      <p>
+        Enjoy the beach worry-free! Your items are securely stored. Remember
+        your PIN code to retrieve your belongings later.
+      </p>
+    </div>
+
+    <script>
+      function createConfetti() {
+        const colors = ["#0066CC", "#4CAF50", "#FF6B6B", "#FFA500", "#9C27B0"];
+        const container = document.body;
+
+        for (let i = 0; i < 150; i++) {
+          const confetti = document.createElement("div");
+          confetti.className = "confetti";
+          confetti.style.top = 0;
+          confetti.style.left = Math.random() * 100 + "vw";
+          confetti.style.backgroundColor =
+            colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.width = Math.random() * 10 + 5 + "px";
+          confetti.style.height = Math.random() * 10 + 5 + "px";
+          confetti.style.opacity = Math.random() * 0.5 + 0.5;
+          confetti.style.animationDuration = Math.random() * 3 + 2 + "s";
+          confetti.style.animationDelay = Math.random() * 2 + "s";
+          container.appendChild(confetti);
+
+          setTimeout(() => {
+            confetti.remove();
+          }, 5000);
+        }
+      }
+
+      window.onload = createConfetti;
+    </script>
+  </body>
+</html>

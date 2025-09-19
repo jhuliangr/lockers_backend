@@ -55,9 +55,9 @@ module.exports = {
     if (pin === lockersHardcodedDatabase[lockerIndex].actualPin) {
       lockersHardcodedDatabase[lockerIndex].free = true;
       lockersHardcodedDatabase[lockerIndex].actualPin = 1234;
-      return res.send(200).json({ message: "unlocked successfully" });
+      return res.status(200).json({ message: "unlocked successfully" });
     }
-    return res.send(400).json({ message: "Incorrect PIN" });
+    return res.status(400).json({ message: "Incorrect PIN" });
   },
   checkIfCanBeOpened(req, res) {
     const { id } = req.params;

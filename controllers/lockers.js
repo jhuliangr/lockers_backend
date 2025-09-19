@@ -65,6 +65,7 @@ module.exports = {
       (locker) => locker.id === id
     );
     if (lockersHardcodedDatabase[lockerIndex].canOpen) {
+      lockersHardcodedDatabase[lockerIndex].canOpen = false;
       return res.status(200).json({ message: "open" });
     }
     return res.status(400).json({ message: "Not possible to open" });

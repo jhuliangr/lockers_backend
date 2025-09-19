@@ -6,6 +6,6 @@ router.get("/", lockers.checkState);
 router.get("/:id", lockers.requestOpenLocker);
 router.post("/:id", lockers.setPasswordAndLock);
 router.post("/:id/unlock", lockers.unlock);
-router.post("/:id/canBeOpened", lockers.checkIfCanBeOpened);
+router.get("/:id/canBeOpened", lockers.checkIfCanBeOpened);
 
 module.exports = router;
